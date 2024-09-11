@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import ProductDetail, { CartList } from "./components/ProductDetail";
 import Cart from "./components/Cart/Cart";
 import { CheckedList } from "./components/CartList/CartList";
+import SignIn from "./Authenticate/SignIn";
+import SignUp from "./Authenticate/SignUp";
 
 const GlobalStyle = createGlobalStyle`
   #root {
@@ -144,9 +146,11 @@ function App() {
       <GlobalStyle />
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />}/>
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/signIn" element={<SignIn />} />
+        <Route path="/signUp" element={<SignUp />} />
       </Routes>
     </BrowserRouter>
 

@@ -96,9 +96,13 @@ export default function Header() {
         <span>장바구니</span>
         {cartList.length ? <RedDot>{cartList.length}</RedDot> : null}
       </HeaderImoge>
-      <HeaderImoge >
+      <HeaderImoge onClick={() => navigate('/signIn')}>
         <Img src="/images/icon-user.svg" />
         <span>로그인</span>
+      </HeaderImoge>
+      <HeaderImoge style={{ right: '9%' }} onClick={() => navigate('/signUp')}>
+        <Img src="/images/icon-signup.svg" />
+        <span>회원가입</span>
       </HeaderImoge>
     </Wrapper>
   );
