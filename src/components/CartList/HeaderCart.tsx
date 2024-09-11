@@ -36,6 +36,7 @@ export default function HeaderCart() {
   const dispatch = useDispatch();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.checked);
     if (e.target.checked === true) {
       dispatch(fullCheckedList());
     } else {
@@ -45,7 +46,7 @@ export default function HeaderCart() {
   return (
     <AllCartInfo>
       <Label htmlFor="checkbox" checked={checkedList.length > 0 && (cartList.length === checkedList.length)} />
-      <input id="checkbox" type="checkbox" onChange={handleChange} checked={checkedList.length ? true : false} />
+      <input id="checkbox" type="checkbox" onChange={handleChange} checked={checkedList.length > 0 && (cartList.length === checkedList.length)} />
       <span>상품정보</span>
       <span>수량</span>
       <span>상품금액</span>

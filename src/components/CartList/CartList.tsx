@@ -75,17 +75,19 @@ export interface CheckedList {
 export default function CartList({ id, name, price, provider, image, count }: BIM) {
   const dispatch = useDispatch();
   const cartList = useSelector((state: State) => state.openMarket.cartList);
-  const cartItem = cartList.find(cartItem => cartItem.id === id)!;
   const checkedList = useSelector((state: State) => state.openMarket.checkedList);
 
   const handleCount = (oper: string) => {
-    if (oper === '+') {
-      const newCartItem = { ...cartItem, count: 1 };
-      dispatch(setCartList(newCartItem));
-    } else {
-      if (count === 1) return;
-      const newCartItem = { ...cartItem, count: -1 };
-      dispatch(setCartList(newCartItem));
+    const cartItem = cartList.find(cartItem => cartItem.id === id);
+    if (cartItem) {
+      if (oper === '+') {
+        const newCartItem = { ...cartItem, count: 1 };
+        dispatch(setCartList(newCartItem));
+      } else {
+        if (count === 1) return;
+        const newCartItem = { ...cartItem, count: -1 };
+        dispatch(setCartList(newCartItem));
+      }
     }
   }
   console.log('CartList.tsx', checkedList);
