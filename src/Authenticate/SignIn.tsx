@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { Button, Form, Input, Nav, P, Title, Wrapper } from "../components/Auth-Component/Auth-Component";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setLoginUI } from "../App";
 
 interface FieldValues {
   userId: string;
@@ -11,6 +13,7 @@ interface FieldValues {
 export default function SignIn() {
   const { register, handleSubmit, formState: { errors }, setError } = useForm<FieldValues>();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const validate = async (data: FieldValues) => {
     const response = await axios.get(`http://localhost:3000/users?userId=${data.userId}`);
@@ -21,9 +24,10 @@ export default function SignIn() {
       });
       return;
     }
-    const respon = await axios.post('http://localhost:3001/signIn', data);
+    const respon = await axios.post('http://localhost:3001/signIn', data, { withCredentials: true });
     const responData = respon.data;
     if (responData) {
+      dispatch(setLoginUI(responData));
       navigate('/');
     }
   }

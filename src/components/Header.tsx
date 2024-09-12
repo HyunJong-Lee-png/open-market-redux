@@ -1,7 +1,8 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { State } from "../App";
+import { setLoginUI, State } from "../App";
+import axios from "axios";
 
 const Wrapper = styled.div`
   height: 90px;
@@ -78,10 +79,35 @@ const Img = styled.img`
   width: 32px;
 `;
 
+const LoginWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+  cursor:default;
+  &>span:first-child{
+    color:#CD5C08;
+  }
+  &>span>span,&>span:last-child{
+    font-size: 12px;
+    color:black;
+  }
+`;
+
 
 export default function Header() {
   const cartList = useSelector((state: State) => state.openMarket.cartList);
+  const loginUI = useSelector((state: State) => state.openMarket.login);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleSignOut = async () => {
+    const response = (await axios.post('http://localhost:3001/logout', {}, { withCredentials: true })).data;
+    if(response.success){
+      dispatch(setLoginUI({}));
+    }
+  }
 
   return (
     <Wrapper>
@@ -91,16 +117,28 @@ export default function Header() {
         <HeaderLabel />
         <HeaderButton id="button" />
       </HeaderSearch>
-      <HeaderImoge style={{ right: '20%' }} onClick={() => navigate('/cart')}>
+      <HeaderImoge style={{ right: '21%' }} onClick={() => navigate('/cart')}>
         <Img src="/images/icon-shopping-cart.svg" />
         <span>장바구니</span>
         {cartList.length ? <RedDot>{cartList.length}</RedDot> : null}
       </HeaderImoge>
-      <HeaderImoge onClick={() => navigate('/signIn')}>
-        <Img src="/images/icon-user.svg" />
-        <span>로그인</span>
-      </HeaderImoge>
-      <HeaderImoge style={{ right: '9%' }} onClick={() => navigate('/signUp')}>
+      {Object.keys(loginUI).length ?
+        <HeaderImoge style={{ right: '13%' }}>
+          <LoginWrapper>
+            <span>{loginUI.userName}
+              <span>님</span>
+            </span>
+            <span>어서오세요!</span>
+            <button onClick={handleSignOut}>로그아웃</button>
+          </LoginWrapper>
+
+        </HeaderImoge> :
+        <HeaderImoge onClick={() => navigate('/signIn')}>
+          <Img src="/images/icon-user.svg" />
+          <span>로그인</span>
+        </HeaderImoge>
+      }
+      <HeaderImoge style={{ right: '8%' }} onClick={() => navigate('/signUp')}>
         <Img src="/images/icon-signup.svg" />
         <span>회원가입</span>
       </HeaderImoge>

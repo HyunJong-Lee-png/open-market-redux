@@ -40,12 +40,6 @@ button {
 
 `;
 
-interface InitialState {
-  products: Product[],
-  cartList: CartList[],
-  checkedList: number[],
-}
-
 export interface Product {
   id: number;
   name: string;
@@ -59,13 +53,37 @@ export interface State {
     products: Product[],
     cartList: CartList[],
     checkedList: number[],
+    login: Login,
   }
+}
+
+interface Login {
+  id?: string;
+  userId?: string;
+  userName?: string;
+  hashed_password?: {
+    type: string;
+    data: number[];
+  };
+  salt?: {
+    type: string;
+    data: number[];
+  };
+  email?: string;
+}
+
+interface InitialState {
+  products: Product[],
+  cartList: CartList[],
+  checkedList: number[],
+  login: Login;
 }
 
 const initialState: InitialState = {
   products: [],
   cartList: [],
   checkedList: [],
+  login: {},
 }
 
 const counterSlice = createSlice({
@@ -111,7 +129,10 @@ const counterSlice = createSlice({
     },
     fullCheckedList: (state) => {
       state.checkedList = state.cartList.map(carItem => carItem.id);
-    }
+    },
+    setLoginUI: (state, action: PayloadAction<Login>) => {
+      state.login = action.payload;
+    },
   },
 });
 
@@ -122,7 +143,8 @@ export const {
   deleteCartListAndCheckedList,
   resetCheckedList,
   fullCheckedList,
-  setPriceProducts } = counterSlice.actions;
+  setPriceProducts,
+  setLoginUI } = counterSlice.actions;
 
 export const store = configureStore({
   reducer: {
@@ -136,6 +158,9 @@ function App() {
     (async function () {
       const result = await axios.get('/data/products.json');
       dispatch(setProducts(result.data));
+      const response = await axios.get('http://localhost:3001', { withCredentials: true });
+      const user = response.data;
+      dispatch(setLoginUI(user));
     })();
 
 
@@ -146,7 +171,7 @@ function App() {
       <GlobalStyle />
       <Header />
       <Routes>
-        <Route path="/" element={<Home />}/>
+        <Route path="/" element={<Home />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/signIn" element={<SignIn />} />

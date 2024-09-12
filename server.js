@@ -11,16 +11,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({
   origin: 'http://localhost:5173',
-  credentials:true,
+  credentials: true,
 }));
 app.use(session({
   resave: false,
   saveUninitialized: false,
   secret: 'my-login',
-  name: 'HyunJongCookie',
   cookie: {
     httpOnly: true,
     maxAge: 300000,
+
   }
 }))
 app.use(passport.initialize());
