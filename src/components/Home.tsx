@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { setPriceProducts, State } from "../App";
 import Product from "./Product";
+import pro from "../../public/data/products.json"
 
 const EventBanner = styled.img`
   width: 100%;
@@ -30,6 +31,7 @@ const ProductWrapper = styled.div`
 export default function Home() {
   const products = useSelector((state: State) => state.openMarket.products);
   const dispatch = useDispatch();
+
 
   const handlePrice = (price: string) => {
     if (price === 'row') {
